@@ -1,0 +1,31 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: estacionamento-api
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false   # datas saem em ISO-8601 (2026-10-19T08:30:00)
+      indent-output: true
+    default-property-inclusion: always   # campos nulos continuam aparecendo no JSON
+
+# Configuracao do estacionamento (tudo em memoria, sem banco de dados).
+# Pode ser alterada aqui ou em tempo de execucao via PUT /api/configuracao.
+estacionamento:
+  filas: 3
+  vagas-por-fila: 4
+  valor-primeira-hora: 5.00
+  valor-hora-adicional: 3.00
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+
+logging:
+  level:
+    br.com.estacionamento: INFO

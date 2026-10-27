@@ -1,0 +1,127 @@
+### Sequencia de testes da API do Estacionamento
+### VS Code: instale a extensao "REST Client" e clique em "Send Request" acima de cada bloco.
+### IntelliJ: o arquivo .http ja e reconhecido nativamente.
+
+@host = http://localhost:8080
+
+### Configuracao atual (tamanho do estacionamento e tabela de precos)
+GET {{host}}/api/configuracao
+
+### Mapa das vagas, tudo livre no inicio
+GET {{host}}/api/relatorio
+
+### 1 - Entrada de veiculo com horario informado
+POST {{host}}/api/entradas
+Content-Type: application/json
+
+{
+  "placa": "ABC1D23",
+  "dataHora": "19/10/2026 08:30"
+}
+
+### 1 - Entrada de veiculo usando o horario atual (dataHora omitido)
+POST {{host}}/api/entradas
+Content-Type: application/json
+
+{
+  "placa": "XYZ9K88"
+}
+
+### 1 - Erro 409: a mesma placa nao pode entrar duas vezes
+POST {{host}}/api/entradas
+Content-Type: application/json
+
+{
+  "placa": "ABC1D23"
+}
+
+### 1 - Erro 400: placa vazia
+POST {{host}}/api/entradas
+Content-Type: application/json
+
+{
+  "placa": "   "
+}
+
+### 2 - Buscar veiculo por placa
+GET {{host}}/api/veiculos/ABC1D23
+
+### 2 - Erro 404: placa que nao esta estacionada
+GET {{host}}/api/veiculos/ZZZ0Z00
+
+### Listar todos os veiculos estacionados
+GET {{host}}/api/veiculos
+
+### Listar todas as vagas
+GET {{host}}/api/vagas
+
+### Listar apenas as vagas livres
+GET {{host}}/api/vagas?status=LIVRE
+
+### Buscar uma vaga especifica
+GET {{host}}/api/vagas/A1
+
+### 6 - Colocar a vaga B1 em manutencao
+PATCH {{host}}/api/vagas/B1/manutencao
+Content-Type: application/json
+
+{
+  "emManutencao": true
+}
+
+### 6 - Alternar o estado da vaga B1 (sem corpo)
+PATCH {{host}}/api/vagas/B1/manutencao
+
+### 6 - Erro 409: vaga ocupada nao entra em manutencao
+PATCH {{host}}/api/vagas/A1/manutencao
+Content-Type: application/json
+
+{
+  "emManutencao": true
+}
+
+### 6 - Erro 404: vaga que nao existe
+PATCH {{host}}/api/vagas/Z9/manutencao
+
+### 4 - Relatorio de ocupacao
+GET {{host}}/api/relatorio
+
+### 3 - Erro 400: saida anterior a entrada
+POST {{host}}/api/saidas
+Content-Type: application/json
+
+{
+  "placa": "ABC1D23",
+  "dataHora": "19/10/2026 07:00"
+}
+
+### 3 - Saida de veiculo: 3h15min = 4 horas cobradas = R$ 14,00
+POST {{host}}/api/saidas
+Content-Type: application/json
+
+{
+  "placa": "ABC1D23",
+  "dataHora": "19/10/2026 11:45"
+}
+
+### 3 - Erro 404: saida de placa que nao esta estacionada
+POST {{host}}/api/saidas
+Content-Type: application/json
+
+{
+  "placa": "ZZZ0Z00"
+}
+
+### 5 - Historico e total arrecadado
+GET {{host}}/api/historico
+
+### Recria o estacionamento 4x5 e apaga tudo
+PUT {{host}}/api/configuracao
+Content-Type: application/json
+
+{
+  "filas": 4,
+  "vagasPorFila": 5,
+  "valorPrimeiraHora": 6.00,
+  "valorHoraAdicional": 4.00
+}

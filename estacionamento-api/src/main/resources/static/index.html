@@ -1,0 +1,819 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pátio A1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#FFFFFF;
+    --bg-2:#F4F4F6;
+    --bg-3:#EAEAEE;
+    --ink:#1A1A1C;
+    --ink-2:#56565A;
+    --ink-3:#8C8C92;
+    --hair:#E7E7EB;
+    --accent:#2F6FD0;
+    --accent-tint:#EBF2FC;
+    --livre:#1E8A5C;
+    --manut:#A3741C;
+    --danger:#B22F22;
+    --r:14px;
+    --r-g:20px;
+    --fonte:'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0C0C0E;
+      --bg-2:#1A1A1D;
+      --bg-3:#232327;
+      --ink:#F2F2F4;
+      --ink-2:#A9A9AF;
+      --ink-3:#7B7B82;
+      --hair:#29292E;
+      --accent:#74A6F0;
+      --accent-tint:#17243A;
+      --livre:#53C08D;
+      --manut:#D8A44E;
+      --danger:#E8847B;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0C0C0E;
+    --bg-2:#1A1A1D;
+    --bg-3:#232327;
+    --ink:#F2F2F4;
+    --ink-2:#A9A9AF;
+    --ink-3:#7B7B82;
+    --hair:#29292E;
+    --accent:#74A6F0;
+    --accent-tint:#17243A;
+    --livre:#53C08D;
+    --manut:#D8A44E;
+    --danger:#E8847B;
+    color-scheme: dark;
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+  :root{
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--fonte); font-size:16px; line-height:1.55; font-weight:400;
+    -webkit-font-smoothing:antialiased; letter-spacing:-0.002em;
+  }
+  img{ max-width:100%; }
+  [hidden]{ display:none !important; }
+  button,input{ font:inherit; color:inherit; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:3px; border-radius:8px; }
+  h1,h2{ margin:0; font-weight:600; letter-spacing:-0.018em; }
+  p{ margin:0; }
+  .tab{ font-variant-numeric:tabular-nums; }
+
+  /* ---------- topo ---------- */
+  .topo{
+    position:sticky; top:env(safe-area-inset-top, 0px); z-index:30;
+    background:var(--bg);
+    background:color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter:saturate(180%) blur(18px);
+    -webkit-backdrop-filter:saturate(180%) blur(18px);
+  }
+  .topo-interno{
+    max-width:1040px; margin:0 auto; padding:18px 24px;
+    display:flex; align-items:center; gap:20px; flex-wrap:wrap;
+  }
+  .topo h1{ font-size:19px; margin-right:auto; }
+  .estado{ display:inline-flex; align-items:center; gap:8px; font-size:14px; color:var(--ink-2); }
+  .estado i{ width:7px; height:7px; border-radius:50%; background:var(--ink-3); flex:none; }
+  .estado.ligado i{ background:var(--livre); }
+  .estado.caiu i{ background:var(--danger); }
+
+  /* ---------- estrutura ---------- */
+  .pagina{ max-width:1040px; margin:0 auto; padding-inline:24px; padding-block:0 96px; }
+  @media (max-width:560px){ .pagina{ padding-inline:20px; } .topo-interno{ padding:16px 20px; } }
+
+  .secao{ margin-top:72px; }
+  @media (max-width:700px){ .secao{ margin-top:52px; } }
+
+  .secao-cabeca{
+    display:flex; align-items:baseline; justify-content:space-between; gap:16px;
+    margin-bottom:22px;
+  }
+  .secao-cabeca h2{ font-size:21px; }
+  .secao-cabeca .conta{ font-size:14px; color:var(--ink-3); }
+
+  /* ---------- abertura ---------- */
+  .abertura{ padding-top:44px; }
+  .declaracao{
+    font-size:clamp(30px, 5.4vw, 46px); font-weight:300; line-height:1.14;
+    letter-spacing:-0.03em; color:var(--ink-3); text-wrap:balance; margin-bottom:18px;
+  }
+  .declaracao strong{ font-weight:500; color:var(--ink); }
+  .resumo{ font-size:15.5px; color:var(--ink-2); }
+  .resumo span{ white-space:nowrap; }
+  .trilho{ height:4px; border-radius:999px; background:var(--bg-2); margin-top:28px; overflow:hidden; }
+  .trilho span{ display:block; height:100%; background:var(--accent); border-radius:999px; transition:width .35s ease; }
+
+  /* ---------- API fora do ar ---------- */
+  .caiu-texto{ max-width:58ch; }
+  .caiu-texto p{ font-size:16.5px; color:var(--ink-2); margin-top:16px; }
+  .caiu-texto code{
+    font-family:ui-monospace, 'Cascadia Mono', Consolas, monospace;
+    font-size:15px; color:var(--ink);
+  }
+  .caiu-texto .botao{ margin-top:28px; }
+
+  /* ---------- mapa ---------- */
+  .fila{ padding-bottom:26px; margin-bottom:26px; border-bottom:1px solid var(--hair); }
+  .fila:last-child{ padding-bottom:0; margin-bottom:0; border-bottom:0; }
+  .fila-rotulo{ font-size:14px; color:var(--ink-3); margin-bottom:12px; }
+  .baias{ display:grid; grid-template-columns:repeat(auto-fill, minmax(146px, 1fr)); gap:10px 18px; }
+  @media (max-width:560px){ .baias{ grid-template-columns:repeat(auto-fill, minmax(118px, 1fr)); gap:6px 12px; } }
+
+  .baia{
+    appearance:none; border:0; background:none; cursor:pointer; text-align:left;
+    display:flex; flex-direction:column; gap:5px;
+    padding:14px 12px 16px; border-radius:14px;
+    transition:background .16s ease;
+  }
+  .baia:hover{ background:var(--bg-2); }
+  .baia .ponto{
+    align-self:flex-start; flex:none;
+    width:11px; height:11px; border-radius:50%; margin-bottom:3px;
+    border:1.5px solid var(--ink-3); background:transparent;
+  }
+  .baia .num{ font-size:13px; color:var(--ink-3); }
+  .baia .titulo{
+    font-size:16px; font-weight:600; letter-spacing:.04em;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:100%;
+  }
+  .baia .sub{ font-size:13px; color:var(--ink-3); }
+
+  .baia[data-status="LIVRE"] .titulo{ font-size:15px; font-weight:400; letter-spacing:normal; color:var(--ink-3); }
+  .baia[data-status="OCUPADA"] .ponto{ background:var(--accent); border-color:var(--accent); }
+  .baia[data-status="MANUTENCAO"] .ponto{ background:var(--manut); border-color:var(--manut); }
+  .baia[data-status="MANUTENCAO"] .titulo{ font-size:15px; font-weight:500; letter-spacing:normal; color:var(--manut); }
+  .baia.realcada{ background:var(--accent-tint); }
+
+  .legenda{ display:flex; flex-wrap:wrap; gap:10px 28px; margin-top:30px; font-size:14px; color:var(--ink-2); }
+  .legenda span{ display:inline-flex; align-items:center; gap:9px; }
+  .legenda i{ width:11px; height:11px; border-radius:50%; display:inline-block; flex:none; border:1.5px solid transparent; }
+
+  /* ---------- formulários ---------- */
+  .duas{ display:grid; grid-template-columns:repeat(auto-fit, minmax(290px, 1fr)); gap:40px 56px; }
+  .campo{ margin-bottom:18px; }
+  .campo label{ display:block; font-size:14px; color:var(--ink-2); margin-bottom:8px; }
+  .campo .ajuda{ display:block; font-size:13px; color:var(--ink-3); margin-top:8px; }
+  input[type="text"],input[type="datetime-local"]{
+    width:100%; border:0; border-bottom:1px solid var(--hair); background:none; border-radius:0;
+    padding:10px 0 12px; font-size:17px; line-height:1.3;
+    transition:border-color .16s ease;
+  }
+  input[type="text"]{ letter-spacing:.07em; }
+  input::placeholder{ color:var(--ink-3); letter-spacing:normal; }
+  input:hover{ border-bottom-color:var(--ink-3); }
+  input:focus{ outline:none; border-bottom-color:var(--accent); border-bottom-width:2px; padding-bottom:11px; }
+
+  .botao{
+    appearance:none; border:0; cursor:pointer; border-radius:999px;
+    padding:13px 26px; font-size:15px; font-weight:500;
+    background:var(--bg-2); color:var(--ink); transition:background .16s ease, opacity .16s ease;
+  }
+  .botao:hover{ background:var(--bg-3); }
+  .botao.principal{ background:var(--accent); color:#FFFFFF; }
+  .botao.principal:hover{ opacity:.88; background:var(--accent); }
+  .botao.texto{ background:none; padding:10px 2px; color:var(--accent); }
+  .botao.texto:hover{ background:none; text-decoration:underline; }
+  .botao.quieto{ background:none; padding:10px 2px; color:var(--danger); font-size:14px; }
+  .botao.quieto:hover{ background:none; text-decoration:underline; }
+  .botao:disabled{ opacity:.45; cursor:not-allowed; }
+
+  /* ---------- listas e tabela ---------- */
+  .lista{ list-style:none; margin:0; padding:0; }
+  .lista li{
+    display:flex; align-items:center; gap:18px;
+    padding:17px 0; border-bottom:1px solid var(--hair);
+  }
+  .lista li:first-child{ border-top:1px solid var(--hair); }
+  .lista .vaga{ font-size:14px; color:var(--ink-3); width:34px; flex:none; }
+  .lista .placa{ font-size:16px; font-weight:600; letter-spacing:.05em; }
+  .lista .meta{ font-size:13.5px; color:var(--ink-3); }
+  .lista .direita{ margin-left:auto; text-align:right; }
+  .lista .direita .tempo{ font-size:15px; }
+
+  .vazio{ color:var(--ink-3); font-size:15px; padding:6px 0; }
+
+  .rolagem{ overflow-x:auto; }
+  table{ width:100%; border-collapse:collapse; font-size:15px; min-width:600px; }
+  th{
+    text-align:left; font-size:13.5px; font-weight:400; color:var(--ink-3);
+    padding:0 20px 12px 0; border-bottom:1px solid var(--hair);
+  }
+  td{ padding:17px 20px 17px 0; border-bottom:1px solid var(--hair); }
+  td.placa{ font-weight:600; letter-spacing:.05em; }
+  th.num,td.num{ text-align:right; padding-right:0; }
+  tfoot td{ border-bottom:0; color:var(--ink-2); font-size:14.5px; padding-top:18px; }
+  tfoot td.num{ color:var(--ink); font-size:16px; font-weight:600; }
+
+  /* ---------- diálogo ---------- */
+  dialog{
+    border:0; border-radius:26px; padding:0; color:var(--ink); background:var(--bg);
+    width:min(440px, calc(100vw - 40px));
+    box-shadow:0 24px 70px rgba(0,0,0,.22);
+  }
+  dialog::backdrop{ background:rgba(8,8,10,.42); backdrop-filter:blur(3px); }
+  .dlg{ padding:34px 34px 28px; }
+  @media (max-width:560px){ .dlg{ padding:28px 24px 24px; } }
+  .dlg .etiqueta{ font-size:14px; color:var(--ink-3); margin-bottom:4px; }
+  .dlg h2{ font-size:27px; margin-bottom:22px; }
+  .pares{ margin:0 0 24px; }
+  .pares div{ display:flex; justify-content:space-between; gap:20px; padding:12px 0; border-bottom:1px solid var(--hair); }
+  .pares div:first-child{ border-top:1px solid var(--hair); }
+  .pares dt{ color:var(--ink-2); font-size:14.5px; }
+  .pares dd{ margin:0; font-size:15px; font-weight:500; }
+  .nota{ font-size:14.5px; color:var(--ink-2); margin-bottom:26px; }
+  .dlg-acoes{ display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap; }
+
+  /* ---------- avisos ---------- */
+  .avisos{
+    position:fixed; left:50%; transform:translateX(-50%); bottom:28px; z-index:60;
+    display:flex; flex-direction:column; gap:10px; width:min(420px, calc(100vw - 40px));
+  }
+  .aviso{
+    background:var(--bg); border-radius:var(--r-g); padding:16px 22px; font-size:15px;
+    box-shadow:0 2px 6px rgba(0,0,0,.06), 0 16px 44px rgba(0,0,0,.14);
+    animation:sobe .22s ease-out;
+  }
+  .aviso b{ display:block; font-size:13.5px; font-weight:500; margin-bottom:3px; color:var(--ink-3); }
+  .aviso.sucesso b{ color:var(--livre); }
+  .aviso.erro b{ color:var(--danger); }
+  @keyframes sobe{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="topo-interno">
+    <h1>Pátio A1</h1>
+    <span class="estado" id="estado"><i></i><span id="estadoTexto">Conectando</span></span>
+    <button class="botao texto" id="btnAtualizar" type="button">Atualizar</button>
+  </div>
+</header>
+
+<main class="pagina">
+
+  <section class="abertura">
+    <div id="numeros">
+      <p class="declaracao"><strong id="declFrase">Carregando o pátio</strong></p>
+      <p class="resumo" id="resumo"></p>
+      <div class="trilho"><span id="trilhoBarra" style="width:0%"></span></div>
+    </div>
+
+    <div class="caiu-texto" id="foraDoAr" hidden>
+      <p class="declaracao"><strong>API fora do ar</strong></p>
+      <p>Esta tela não guarda nada: todos os números vêm da API do estacionamento, que não respondeu em <code id="enderecoApi">http://localhost:8080</code>.</p>
+      <p>Suba o servidor com <code>mvn spring-boot:run</code> e tente de novo.</p>
+      <button class="botao principal" type="button" id="btnTentar">Tentar de novo</button>
+    </div>
+  </section>
+
+  <div id="conteudo" hidden>
+
+    <section class="secao">
+      <div class="secao-cabeca">
+        <h2>Mapa do pátio</h2>
+        <span class="conta" id="contaMapa"></span>
+      </div>
+      <div id="mapa"></div>
+      <div class="legenda">
+        <span><i style="border-color:var(--ink-3)"></i> Livre</span>
+        <span><i style="background:var(--accent)"></i> Ocupada</span>
+        <span><i style="background:var(--manut)"></i> Em manutenção</span>
+        <span>Toque numa vaga para agir sobre ela</span>
+      </div>
+    </section>
+
+    <section class="secao">
+      <div class="secao-cabeca"><h2>Movimentação</h2></div>
+      <div class="duas">
+        <form id="formEntrada" novalidate>
+          <div class="campo">
+            <label for="entradaPlaca">Placa que está entrando</label>
+            <input type="text" id="entradaPlaca" name="placa" placeholder="ABC1D23" maxlength="10" autocomplete="off" required>
+          </div>
+          <div class="campo">
+            <label for="entradaData">Data e hora</label>
+            <input type="datetime-local" id="entradaData" name="dataHora">
+            <span class="ajuda">Em branco, usa o horário de agora.</span>
+          </div>
+          <button class="botao principal" type="submit" id="btnEntrada">Registrar entrada</button>
+        </form>
+
+        <form id="formBusca" novalidate>
+          <div class="campo">
+            <label for="buscaPlaca">Procurar um veículo</label>
+            <input type="text" id="buscaPlaca" name="placa" placeholder="ABC1D23" maxlength="10" autocomplete="off" required>
+            <span class="ajuda">Mostra em qual vaga ele está e há quanto tempo.</span>
+          </div>
+          <button class="botao" type="submit">Localizar no mapa</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="secao">
+      <div class="secao-cabeca">
+        <h2>No pátio agora</h2>
+        <span class="conta" id="contaVeiculos"></span>
+      </div>
+      <ul class="lista" id="listaVeiculos"></ul>
+      <p class="vazio" id="veiculosVazio" hidden>Nenhum veículo estacionado.</p>
+    </section>
+
+    <section class="secao">
+      <div class="secao-cabeca">
+        <h2>Histórico de saídas</h2>
+        <span class="conta" id="contaHistorico"></span>
+      </div>
+      <div class="rolagem">
+        <table id="tabelaHistorico">
+          <thead>
+            <tr>
+              <th>Placa</th><th>Vaga</th><th>Entrada</th><th>Saída</th>
+              <th>Permanência</th><th class="num">Valor</th>
+            </tr>
+          </thead>
+          <tbody id="corpoHistorico"></tbody>
+          <tfoot id="rodapeHistorico" hidden>
+            <tr>
+              <td colspan="5">Total arrecadado</td>
+              <td class="num tab" id="totalHistorico"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <p class="vazio" id="historicoVazio" hidden>Nenhum veículo saiu ainda.</p>
+    </section>
+
+    <section class="secao">
+      <p class="vazio" style="margin-bottom:6px">Zera o pátio inteiro: vagas, veículos e histórico.</p>
+      <button class="botao quieto" type="button" id="btnZerar">Reiniciar pátio</button>
+    </section>
+
+  </div>
+</main>
+
+<dialog id="dialogoVaga" aria-labelledby="dlgTitulo">
+  <div class="dlg">
+    <p class="etiqueta" id="dlgEtiqueta"></p>
+    <h2 id="dlgTitulo">Vaga</h2>
+    <div id="dlgCorpo"></div>
+    <div class="dlg-acoes" id="dlgAcoes"></div>
+  </div>
+</dialog>
+
+<div class="avisos" id="avisos" aria-live="polite"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ================= 1. Cliente da API ================= */
+
+  // Servida pelo próprio Spring Boot: mesma origem. Aberta por outro
+  // servidor (Live Server, por exemplo): procura a API na porta 8080.
+  var mesmaOrigem = ["localhost", "127.0.0.1", "[::1]"].indexOf(location.hostname) >= 0
+                    && location.port === "8080";
+  var BASE = mesmaOrigem ? "" : "http://localhost:8080";
+
+  function ErroApi(corpo) {
+    var e = new Error(corpo.mensagem || "Não foi possível falar com a API.");
+    e.codigo = corpo.codigo || "SEM_RESPOSTA";
+    e.status = corpo.status || 0;
+    return e;
+  }
+
+  function pedir(caminho, opcoes) {
+    opcoes = opcoes || {};
+    var cabecalhos = { Accept: "application/json" };
+    if (opcoes.body) { cabecalhos["Content-Type"] = "application/json"; }
+    return fetch(BASE + caminho, {
+      method: opcoes.method || "GET",
+      headers: cabecalhos,
+      body: opcoes.body ? JSON.stringify(opcoes.body) : undefined
+    }).then(function (resposta) {
+      if (!resposta.ok) {
+        return resposta.json()
+          .catch(function () { return { status: resposta.status, mensagem: "Erro HTTP " + resposta.status + "." }; })
+          .then(function (corpo) { throw ErroApi(corpo); });
+      }
+      return resposta.status === 204 ? null : resposta.json();
+    }, function () {
+      throw ErroApi({ status: 0, codigo: "SEM_RESPOSTA", mensagem: "A API não respondeu." });
+    });
+  }
+
+  var api = {
+    configuracao: function () { return pedir("/api/configuracao"); },
+    relatorio:    function () { return pedir("/api/relatorio"); },
+    historico:    function () { return pedir("/api/historico"); },
+    veiculo:      function (placa) { return pedir("/api/veiculos/" + encodeURIComponent(placa)); },
+    entrada:      function (c) { return pedir("/api/entradas", { method: "POST", body: c }); },
+    saida:        function (c) { return pedir("/api/saidas", { method: "POST", body: c }); },
+    manutencao:   function (id, v) {
+      return pedir("/api/vagas/" + encodeURIComponent(id) + "/manutencao",
+        { method: "PATCH", body: { emManutencao: v } });
+    },
+    reconfigurar: function (c) { return pedir("/api/configuracao", { method: "PUT", body: c }); }
+  };
+
+  /* ================= 2. Estado ================= */
+
+  var config = { filas: 3, vagasPorFila: 4 };
+  var placaRealcada = null;
+
+  var dinheiro = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+  function $(id) { return document.getElementById(id); }
+
+  function avisar(titulo, texto, tipo) {
+    var caixa = document.createElement("div");
+    caixa.className = "aviso " + (tipo || "");
+    var t = document.createElement("b"); t.textContent = titulo;
+    var p = document.createElement("span"); p.textContent = texto;
+    caixa.appendChild(t); caixa.appendChild(p);
+    $("avisos").appendChild(caixa);
+    setTimeout(function () { caixa.remove(); }, 6000);
+  }
+
+  function avisarErro(erro) {
+    if (erro && erro.status === 0) { mostrarForaDoAr(); return; }
+    var titulo = "Não deu certo";
+    if (erro && erro.status === 404) { titulo = "Não encontrado"; }
+    else if (erro && erro.status === 409) { titulo = "Operação bloqueada"; }
+    else if (erro && erro.status === 400) { titulo = "Dados inválidos"; }
+    avisar(titulo, (erro && erro.message) || "Não foi possível falar com a API.", "erro");
+  }
+
+  /* ================= 3. Renderização ================= */
+
+  function pintarAbertura(r, h) {
+    var frase;
+    if (r.livres === 0) { frase = "Pátio lotado"; }
+    else if (r.livres === 1) { frase = "1 vaga livre"; }
+    else { frase = r.livres + " vagas livres"; }
+    $("declFrase").textContent = frase;
+
+    var partes = [
+      r.totalVagas + " vagas no total",
+      r.ocupadas + (r.ocupadas === 1 ? " ocupada" : " ocupadas"),
+      r.emManutencao + " em manutenção",
+      r.taxaOcupacao.toLocaleString("pt-BR", { maximumFractionDigits: 1 }) + "% de ocupação",
+      dinheiro.format(h.totalArrecadado) + " arrecadados"
+    ];
+    $("resumo").textContent = "";
+    partes.forEach(function (texto, indice) {
+      if (indice > 0) { $("resumo").appendChild(document.createTextNode("   ·   ")); }
+      var s = document.createElement("span");
+      s.className = "tab"; s.textContent = texto;
+      $("resumo").appendChild(s);
+    });
+
+    $("trilhoBarra").style.width = Math.min(100, r.taxaOcupacao) + "%";
+    $("contaMapa").textContent = r.filas + " filas · " + r.vagasPorFila + " vagas por fila";
+  }
+
+  function pintarMapa(r) {
+    var mapa = $("mapa");
+    mapa.textContent = "";
+
+    r.grade.forEach(function (fila, indice) {
+      if (!fila.length) { return; }
+      var bloco = document.createElement("div");
+      bloco.className = "fila";
+
+      var rotulo = document.createElement("p");
+      rotulo.className = "fila-rotulo";
+      rotulo.textContent = "Fila " + String.fromCharCode(65 + indice);
+      bloco.appendChild(rotulo);
+
+      var baias = document.createElement("div");
+      baias.className = "baias";
+
+      fila.forEach(function (vaga) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "baia";
+        b.dataset.status = vaga.status;
+        b.dataset.id = vaga.id;
+
+        var ponto = document.createElement("span");
+        ponto.className = "ponto";
+        ponto.setAttribute("aria-hidden", "true");
+        b.appendChild(ponto);
+
+        var num = document.createElement("span");
+        num.className = "num"; num.textContent = vaga.id;
+        b.appendChild(num);
+
+        var titulo = document.createElement("span");
+        titulo.className = "titulo";
+        b.appendChild(titulo);
+
+        if (vaga.veiculo) {
+          titulo.textContent = vaga.veiculo.placa;
+          var sub = document.createElement("span");
+          sub.className = "sub"; sub.textContent = "há " + vaga.veiculo.permanenciaFormatada;
+          b.appendChild(sub);
+          b.setAttribute("aria-label",
+            "Vaga " + vaga.id + ", ocupada pelo veículo " + vaga.veiculo.placa
+            + ", há " + vaga.veiculo.permanenciaFormatada);
+          if (placaRealcada && vaga.veiculo.placa === placaRealcada) { b.classList.add("realcada"); }
+        } else if (vaga.status === "MANUTENCAO") {
+          titulo.textContent = "Em manutenção";
+          b.setAttribute("aria-label", "Vaga " + vaga.id + ", em manutenção");
+        } else {
+          titulo.textContent = "Livre";
+          b.setAttribute("aria-label", "Vaga " + vaga.id + ", livre");
+        }
+
+        b.addEventListener("click", function () { abrirVaga(vaga); });
+        baias.appendChild(b);
+      });
+
+      bloco.appendChild(baias);
+      mapa.appendChild(bloco);
+    });
+  }
+
+  function pintarVeiculos(r) {
+    var lista = $("listaVeiculos");
+    lista.textContent = "";
+    var veiculos = [];
+    r.grade.forEach(function (fila) {
+      fila.forEach(function (vaga) { if (vaga.veiculo) { veiculos.push(vaga.veiculo); } });
+    });
+
+    $("contaVeiculos").textContent = veiculos.length
+      ? veiculos.length + (veiculos.length === 1 ? " veículo" : " veículos") : "";
+    $("veiculosVazio").hidden = veiculos.length > 0;
+
+    veiculos.forEach(function (v) {
+      var li = document.createElement("li");
+
+      var vaga = document.createElement("span");
+      vaga.className = "vaga"; vaga.textContent = v.idVaga;
+      li.appendChild(vaga);
+
+      var bloco = document.createElement("div");
+      var placa = document.createElement("div");
+      placa.className = "placa"; placa.textContent = v.placa;
+      var meta = document.createElement("div");
+      meta.className = "meta"; meta.textContent = "entrou às " + v.horaEntradaFormatada;
+      bloco.appendChild(placa); bloco.appendChild(meta);
+      li.appendChild(bloco);
+
+      var direita = document.createElement("div");
+      direita.className = "direita";
+      var tempo = document.createElement("div");
+      tempo.className = "tempo tab"; tempo.textContent = v.permanenciaFormatada;
+      var valor = document.createElement("div");
+      valor.className = "meta tab"; valor.textContent = dinheiro.format(v.valorParcial) + " até agora";
+      direita.appendChild(tempo); direita.appendChild(valor);
+      li.appendChild(direita);
+
+      lista.appendChild(li);
+    });
+  }
+
+  function pintarHistorico(h) {
+    var corpo = $("corpoHistorico");
+    corpo.textContent = "";
+    $("contaHistorico").textContent = h.quantidade
+      ? h.quantidade + (h.quantidade === 1 ? " registro" : " registros") : "";
+    $("historicoVazio").hidden = h.quantidade > 0;
+    $("rodapeHistorico").hidden = h.quantidade === 0;
+    $("tabelaHistorico").hidden = h.quantidade === 0;
+    $("totalHistorico").textContent = dinheiro.format(h.totalArrecadado);
+
+    h.registros.slice().reverse().forEach(function (r) {
+      var tr = document.createElement("tr");
+      [
+        { t: r.placa, c: "placa" },
+        { t: r.idVaga, c: "" },
+        { t: r.horaEntradaFormatada, c: "tab" },
+        { t: r.horaSaidaFormatada, c: "tab" },
+        { t: r.permanenciaFormatada, c: "tab" },
+        { t: dinheiro.format(r.valor), c: "num tab" }
+      ].forEach(function (celula) {
+        var td = document.createElement("td");
+        if (celula.c) { td.className = celula.c; }
+        td.textContent = celula.t;
+        tr.appendChild(td);
+      });
+      corpo.appendChild(tr);
+    });
+  }
+
+  function atualizar() {
+    return Promise.all([api.relatorio(), api.historico()]).then(function (res) {
+      mostrarConteudo();
+      pintarAbertura(res[0], res[1]);
+      pintarMapa(res[0]);
+      pintarVeiculos(res[0]);
+      pintarHistorico(res[1]);
+    });
+  }
+
+  /* ================= 4. Diálogo da vaga ================= */
+
+  var dialogo = $("dialogoVaga");
+
+  function botao(texto, classe, aoClicar) {
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "botao " + classe; b.textContent = texto;
+    b.addEventListener("click", aoClicar);
+    return b;
+  }
+
+  function abrirVaga(vaga) {
+    var corpo = $("dlgCorpo"), acoes = $("dlgAcoes");
+    corpo.textContent = ""; acoes.textContent = "";
+    $("dlgTitulo").textContent = "Vaga " + vaga.id;
+    $("dlgEtiqueta").textContent = vaga.status === "LIVRE" ? "Livre"
+                                 : vaga.status === "OCUPADA" ? "Ocupada" : "Em manutenção";
+
+    if (vaga.status === "OCUPADA") {
+      var v = vaga.veiculo;
+      var pares = document.createElement("dl");
+      pares.className = "pares";
+      [["Placa", v.placa], ["Entrada", v.horaEntradaFormatada],
+       ["Permanência", v.permanenciaFormatada], ["Valor até agora", dinheiro.format(v.valorParcial)]]
+        .forEach(function (par) {
+          var linha = document.createElement("div");
+          var dt = document.createElement("dt"); dt.textContent = par[0];
+          var dd2 = document.createElement("dd"); dd2.textContent = par[1];
+          linha.appendChild(dt); linha.appendChild(dd2);
+          pares.appendChild(linha);
+        });
+      corpo.appendChild(pares);
+
+      var campo = document.createElement("div");
+      campo.className = "campo";
+      var lab = document.createElement("label");
+      lab.setAttribute("for", "saidaData"); lab.textContent = "Data e hora da saída";
+      var inp = document.createElement("input");
+      inp.type = "datetime-local"; inp.id = "saidaData";
+      var ajuda = document.createElement("span");
+      ajuda.className = "ajuda"; ajuda.textContent = "Em branco, usa o horário de agora.";
+      campo.appendChild(lab); campo.appendChild(inp); campo.appendChild(ajuda);
+      corpo.appendChild(campo);
+
+      acoes.appendChild(botao("Fechar", "", function () { dialogo.close(); }));
+      acoes.appendChild(botao("Registrar saída", "principal", function () {
+        var quando = $("saidaData").value;
+        api.saida({ placa: v.placa, dataHora: quando || null }).then(function (r) {
+          dialogo.close();
+          avisar("Saída registrada", r.mensagem, "sucesso");
+          return atualizar();
+        }).catch(avisarErro);
+      }));
+
+    } else if (vaga.status === "LIVRE") {
+      var nota = document.createElement("p");
+      nota.className = "nota";
+      nota.textContent = "A entrada sempre ocupa a primeira vaga livre do pátio, varrendo da fila A em diante. "
+        + "Por isso o veículo pode não parar exatamente nesta vaga.";
+      corpo.appendChild(nota);
+
+      acoes.appendChild(botao("Pôr em manutenção", "", function () {
+        api.manutencao(vaga.id, true).then(function () {
+          dialogo.close();
+          avisar("Vaga atualizada", "A vaga " + vaga.id + " entrou em manutenção.", "sucesso");
+          return atualizar();
+        }).catch(avisarErro);
+      }));
+      acoes.appendChild(botao("Registrar entrada", "principal", function () {
+        dialogo.close();
+        $("entradaPlaca").scrollIntoView({ block: "center", behavior: "smooth" });
+        $("entradaPlaca").focus();
+      }));
+
+    } else {
+      var aviso = document.createElement("p");
+      aviso.className = "nota";
+      aviso.textContent = "Enquanto estiver em manutenção, nenhum veículo é alocado nesta vaga "
+        + "e ela sai da conta da taxa de ocupação.";
+      corpo.appendChild(aviso);
+
+      acoes.appendChild(botao("Fechar", "", function () { dialogo.close(); }));
+      acoes.appendChild(botao("Liberar vaga", "principal", function () {
+        api.manutencao(vaga.id, false).then(function () {
+          dialogo.close();
+          avisar("Vaga atualizada", "A vaga " + vaga.id + " voltou a ficar livre.", "sucesso");
+          return atualizar();
+        }).catch(avisarErro);
+      }));
+    }
+
+    dialogo.showModal();
+  }
+
+  /* ================= 5. Eventos ================= */
+
+  $("formEntrada").addEventListener("submit", function (evento) {
+    evento.preventDefault();
+    var placa = $("entradaPlaca").value.trim();
+    if (!placa) { avisar("Falta a placa", "Digite a placa do veículo que está entrando.", "erro"); return; }
+    var quando = $("entradaData").value;
+    $("btnEntrada").disabled = true;
+    api.entrada({ placa: placa, dataHora: quando || null }).then(function (r) {
+      avisar("Entrada registrada", r.mensagem, "sucesso");
+      $("entradaPlaca").value = ""; $("entradaData").value = "";
+      placaRealcada = r.placa;
+      return atualizar();
+    }).catch(avisarErro).then(function () { $("btnEntrada").disabled = false; });
+  });
+
+  $("formBusca").addEventListener("submit", function (evento) {
+    evento.preventDefault();
+    var placa = $("buscaPlaca").value.trim();
+    if (!placa) { return; }
+    api.veiculo(placa).then(function (v) {
+      placaRealcada = v.placa;
+      return atualizar().then(function () {
+        var alvo = document.querySelector('.baia[data-id="' + v.idVaga + '"]');
+        if (alvo) { alvo.scrollIntoView({ block: "center", behavior: "smooth" }); alvo.focus(); }
+        avisar("Veículo localizado", v.placa + " está na vaga " + v.idVaga + " há " + v.permanenciaFormatada + ".", "sucesso");
+      });
+    }).catch(avisarErro);
+  });
+
+  $("btnAtualizar").addEventListener("click", function () {
+    atualizar().then(function () { avisar("Tudo atualizado", "Mapa e histórico recarregados.", "sucesso"); })
+      .catch(avisarErro);
+  });
+
+  $("btnTentar").addEventListener("click", conectar);
+
+  $("btnZerar").addEventListener("click", function () {
+    if (!window.confirm("Isso apaga todas as vagas, os veículos estacionados e o histórico. Continuar?")) { return; }
+    api.reconfigurar({ filas: config.filas, vagasPorFila: config.vagasPorFila })
+      .then(atualizar)
+      .then(function () { avisar("Pátio reiniciado", "Vagas, veículos e histórico foram zerados.", "sucesso"); })
+      .catch(avisarErro);
+  });
+
+  ["entradaPlaca", "buscaPlaca"].forEach(function (id) {
+    $(id).addEventListener("input", function (e) {
+      e.target.value = e.target.value.toUpperCase().replace(/[^A-Z0-9-]/g, "");
+    });
+  });
+
+  /* ================= 6. Conexão ================= */
+
+  function mostrarConteudo() {
+    $("estado").className = "estado ligado";
+    $("estadoTexto").textContent = "API conectada";
+    $("foraDoAr").hidden = true;
+    $("numeros").hidden = false;
+    $("conteudo").hidden = false;
+  }
+
+  function mostrarForaDoAr() {
+    $("estado").className = "estado caiu";
+    $("estadoTexto").textContent = "API fora do ar";
+    $("numeros").hidden = true;
+    $("conteudo").hidden = true;
+    $("foraDoAr").hidden = false;
+  }
+
+  function conectar() {
+    $("estadoTexto").textContent = "Conectando";
+    return api.configuracao()
+      .then(function (c) { config = c; return atualizar(); })
+      .catch(function (erro) {
+        mostrarForaDoAr();
+        if (erro && erro.status && erro.status !== 0) { avisarErro(erro); }
+      });
+  }
+
+  $("enderecoApi").textContent = BASE || location.origin;
+  conectar();
+  setInterval(function () {
+    atualizar().catch(function (erro) {
+      if (erro && erro.status === 0) { mostrarForaDoAr(); }
+    });
+  }, 30000);
+})();
+</script>
+</body>
+</html>

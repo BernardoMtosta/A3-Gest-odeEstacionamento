@@ -1,0 +1,22 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### IntelliJ ###
+.idea/
+*.iml
+*.iws
+*.ipr
+
+### Eclipse ###
+.classpath
+.project
+.settings/
+bin/
+
+### VS Code ###
+.vscode/
+
+### Sistema ###
+Thumbs.db
+.DS_Store
+*.log
